@@ -1,0 +1,1 @@
+Technical task for Collibra job interview
