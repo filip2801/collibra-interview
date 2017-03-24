@@ -11,6 +11,9 @@
     <properties>
         <apache-mina.version>2.0.16</apache-mina.version>
         <spring-boot.version>1.5.2.RELEASE</spring-boot.version>
+
+        <cglib-nodep.version>3.2.5</cglib-nodep.version>
+        <objenesis.version>2.5.1</objenesis.version>
         <spock.version>1.0-groovy-2.4</spock.version>
     </properties>
 
@@ -31,6 +34,20 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <version>${spock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib-nodep.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>${objenesis.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
