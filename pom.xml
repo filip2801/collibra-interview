@@ -8,4 +8,16 @@
     <artifactId>collibra-interview</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <apache-mina.version>2.0.16</apache-mina.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-core</artifactId>
+            <version>${apache-mina.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
