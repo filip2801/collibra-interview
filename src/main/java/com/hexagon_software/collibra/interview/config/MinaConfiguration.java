@@ -3,12 +3,10 @@ package com.hexagon_software.collibra.interview.config;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
-import com.hexagon_software.collibra.interview.SimpleHandler;
+import com.hexagon_software.collibra.interview.adapter.CollibraIoAdapter;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
-import org.apache.mina.core.filterchain.IoFilterChainBuilder;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.service.IoHandler;
-import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
@@ -49,7 +47,7 @@ public class MinaConfiguration {
 
     @Bean
     IoHandler ioHandler() {
-        return new SimpleHandler();
+        return new CollibraIoAdapter();
     }
 
     @Bean
