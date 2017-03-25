@@ -6,7 +6,7 @@ import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SessionEndingMessageWriter {
+public class SessionClosingMessageWriter {
 
     public void write(IoSession session) {
         long sessionTime = System.currentTimeMillis() - session.getCreationTime();

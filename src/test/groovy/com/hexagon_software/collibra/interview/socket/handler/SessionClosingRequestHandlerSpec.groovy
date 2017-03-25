@@ -1,6 +1,6 @@
 package com.hexagon_software.collibra.interview.socket.handler
 
-import com.hexagon_software.collibra.interview.socket.writer.SessionEndingMessageWriter
+import com.hexagon_software.collibra.interview.socket.writer.SessionClosingMessageWriter
 import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 
@@ -8,13 +8,13 @@ class SessionClosingRequestHandlerSpec extends Specification {
 
     def handler
     def session
-    def sessionEndingMessageWriter
+    def sessionClosingMessageWriter
 
     def setup(){
-        sessionEndingMessageWriter = Mock(SessionEndingMessageWriter)
+        sessionClosingMessageWriter = Mock(SessionClosingMessageWriter)
         session = Mock(IoSession)
 
-        handler = new SessionClosingRequestHandler(sessionEndingMessageWriter)
+        handler = new SessionClosingRequestHandler(sessionClosingMessageWriter)
     }
 
     def "should close session"() {
@@ -22,7 +22,7 @@ class SessionClosingRequestHandlerSpec extends Specification {
         handler.handle(session, 'BYE MATE!')
 
         then:
-        1 * sessionEndingMessageWriter.write(session)
+        1 * sessionClosingMessageWriter.write(session)
         1 * session.closeOnFlush()
     }
 

@@ -1,14 +1,11 @@
 package com.hexagon_software.collibra.interview.socket.handler
 
 import com.hexagon_software.collibra.interview.socket.attribute.AttributeNames
-import com.hexagon_software.collibra.interview.socket.attribute.Client
 import com.hexagon_software.collibra.interview.socket.session.SessionId
-import com.hexagon_software.collibra.interview.socket.writer.SessionEndingMessageWriter
+import com.hexagon_software.collibra.interview.socket.writer.SessionClosingMessageWriter
 import org.apache.mina.core.session.IdleStatus
 import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
-
-import java.util.regex.Pattern
 
 class CollibraIoHandlerSpec extends Specification {
 
@@ -16,7 +13,7 @@ class CollibraIoHandlerSpec extends Specification {
     def session
     def matchingHandler
     def notMatchedHandler
-    def sessionEndingWriter
+    def sessionClosingWriter
 
     def unsupportedMessageResponse = 'SORRY, I DIDN’T UNDERSTAND THAT'
 
@@ -24,9 +21,9 @@ class CollibraIoHandlerSpec extends Specification {
         matchingHandler = new MatchingHandler()
         notMatchedHandler = new NotMatchedHandler()
         session = Mock(IoSession)
-        sessionEndingWriter = Mock(SessionEndingMessageWriter)
+        sessionClosingWriter = Mock(SessionClosingMessageWriter)
 
-        handler = new CollibraIoHandler([matchingHandler, notMatchedHandler] as Set, sessionEndingWriter)
+        handler = new CollibraIoHandler([matchingHandler, notMatchedHandler] as Set, sessionClosingWriter)
     }
 
     def "should write message after session opening"() {
@@ -41,12 +38,12 @@ class CollibraIoHandlerSpec extends Specification {
         1 * session.write('HI, I\'M ' + sessionId)
     }
 
-    def "should delegate sessionEndingWriter when session idle time exceeded"() {
+    def "should delegate sessionClosingWriter when session idle time exceeded"() {
         when:
         handler.sessionIdle(session, IdleStatus.READER_IDLE)
 
         then:
-        1 * sessionEndingWriter.write(session)
+        1 * sessionClosingWriter.write(session)
     }
 
     def "should handle message"() {

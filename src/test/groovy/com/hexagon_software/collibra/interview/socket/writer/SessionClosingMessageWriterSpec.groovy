@@ -7,9 +7,9 @@ import spock.lang.Specification
 
 import java.util.regex.Pattern
 
-class SessionEndingMessageWriterSpec extends Specification {
+class SessionClosingMessageWriterSpec extends Specification {
 
-    def writer = new SessionEndingMessageWriter()
+    def writer = new SessionClosingMessageWriter()
     def session = Mock(IoSession)
 
     def "should write message"() {

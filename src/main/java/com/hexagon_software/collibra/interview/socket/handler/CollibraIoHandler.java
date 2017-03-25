@@ -4,8 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.hexagon_software.collibra.interview.socket.attribute.AttributeNames;
-import com.hexagon_software.collibra.interview.socket.attribute.Client;
-import com.hexagon_software.collibra.interview.socket.writer.SessionEndingMessageWriter;
+import com.hexagon_software.collibra.interview.socket.writer.SessionClosingMessageWriter;
 import lombok.AllArgsConstructor;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class CollibraIoHandler extends IoHandlerAdapter {
 
     private final Set<MessageHandler> handlers;
-    private final SessionEndingMessageWriter sessionEndingWritter;
+    private final SessionClosingMessageWriter sessionClosingWriter;
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
@@ -48,7 +47,7 @@ public class CollibraIoHandler extends IoHandlerAdapter {
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
         super.sessionIdle(session, status);
 
-        sessionEndingWritter.write(session);
+        sessionClosingWriter.write(session);
     }
 
 }
