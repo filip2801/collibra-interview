@@ -48,6 +48,19 @@ public class Graph {
         }
     }
 
+    boolean removeNode(NodeName nodeName) {
+        Optional<Node> optional = findNodeByName(nodeName);
+        if (optional.isPresent()) {
+            Node node = optional.get();
+            node.getIncomingEdges()
+                    .forEach(e -> e.getStart().removeIncomingEdge(e));
+
+            nodes.remove(node);
+        }
+
+        return optional.isPresent();
+    }
+
     private Optional<Node> findNodeByName(NodeName name) {
         return nodes.stream()
                 .filter(n -> n.getName().equals(name))

@@ -10,11 +10,11 @@ import org.apache.commons.lang3.Validate;
 public class Node {
 
     @NonNull
-    private final NodeName name;
+    private NodeName name;
     @NonNull
-    private final Set<Edge> outgoingEdges;
+    private Set<Edge> outgoingEdges;
     @NonNull
-    private final Set<Edge> incomingEdges;
+    private Set<Edge> incomingEdges;
 
     public Node(NodeName name) {
         this.name = name;
@@ -24,6 +24,10 @@ public class Node {
 
     public NodeName getName() {
         return name;
+    }
+
+    Set<Edge> getIncomingEdges() {
+        return incomingEdges;
     }
 
     void addEdge(Node end, int weight) {
@@ -37,6 +41,10 @@ public class Node {
         Validate.isTrue(edge.getEnd().equals(this), "end node does not equal to this");
 
         incomingEdges.add(edge);
+    }
+
+    void removeIncomingEdge(Edge edge) {
+
     }
 
     @Override

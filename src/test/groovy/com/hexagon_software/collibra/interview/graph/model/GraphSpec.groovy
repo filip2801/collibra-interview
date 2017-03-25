@@ -78,6 +78,55 @@ class GraphSpec extends Specification {
         0 * node1.addEdge(_, _)
     }
 
+    def "should remove node"() {
+        given:
+        def node1 = n('1')
+        def node2 = n('2')
+        graph.nodes = [node1, node2]
+
+        when:
+        def result = graph.removeNode(new NodeName('1'))
+
+        then:
+        result
+        graph.nodes == [node2] as Set
+    }
+
+    def "should not remove not existing node"() {
+        given:
+        def node1 = n('1')
+        def node2 = n('2')
+        graph.nodes = [node1, node2]
+
+        when:
+        def result = graph.removeNode(new NodeName('not-existing'))
+
+        then:
+        !result
+        graph.nodes == [node1, node2] as Set
+    }
+
+    def "should remove connected edges"() {
+        given:
+        def node1 = mockNode(new NodeName('1'))
+        def node2 = mockNode(new NodeName('2'))
+        def node3 = mockNode(new NodeName('3'))
+        def edgeTo2 = new Edge(node2, node1, 10)
+        def edgeTo3 = new Edge(node3, node1, 10)
+
+        graph.nodes = [node1, node2, node3]
+        node1.getIncomingEdges() >> [edgeTo2, edgeTo3]
+
+        when:
+        def result = graph.removeNode(new NodeName('1'))
+
+        then:
+        result
+        graph.nodes == [node2, node3] as Set
+        1 * node2.removeIncomingEdge(edgeTo2)
+        1 * node3.removeIncomingEdge(edgeTo3)
+    }
+
     Node n(String name) {
         new Node(new NodeName(name))
     }

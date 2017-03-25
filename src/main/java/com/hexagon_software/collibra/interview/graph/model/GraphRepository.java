@@ -29,4 +29,8 @@ public class GraphRepository {
         return graph.addEdge(command);
     }
 
+    public synchronized boolean removeNode(NodeName nodeName) {
+        return graph.removeNode(nodeName);
+    }
+
 }

@@ -43,4 +43,19 @@ class GraphRepositorySpec extends Specification {
         addOrNot = wasAdded ? 'add' : 'not add'
     }
 
+    @Unroll
+    def "should #removeOrNot node"() {
+        given:
+        def nodeName = new NodeName('name')
+        graph.removeNode(nodeName) >> wasRemoved
+
+        expect:
+        repository.removeNode(nodeName) == wasRemoved
+
+        where:
+        wasRemoved << [true, false]
+
+        removeOrNot = wasRemoved ? 'removed' : 'not removed'
+    }
+
 }
