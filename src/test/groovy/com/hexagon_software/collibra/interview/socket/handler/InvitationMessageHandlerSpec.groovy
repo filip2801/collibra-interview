@@ -8,7 +8,7 @@ import spock.lang.Unroll
 
 class InvitationMessageHandlerSpec extends Specification {
 
-    def handler = new InvitationMessageHandler()
+    def handler = new InvitationHandler()
     def session = Mock(IoSession)
 
     @Unroll
