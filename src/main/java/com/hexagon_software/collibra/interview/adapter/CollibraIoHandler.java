@@ -1,23 +1,20 @@
 package com.hexagon_software.collibra.interview.adapter;
 
-import java.util.UUID;
-
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.springframework.stereotype.Component;
 
-public class CollibraIoAdapter extends IoHandlerAdapter {
+@Component
+public class CollibraIoHandler extends IoHandlerAdapter {
 
     public static final String SESSION_ID = "SESSION_ID";
 
     @Override
-    public void sessionCreated(IoSession session) throws Exception {
-        super.sessionCreated(session);
-        System.out.println("Session created");
+    public void sessionOpened(IoSession session) throws Exception {
+        super.sessionOpened(session);
 
-        UUID uuid = UUID.randomUUID();
-
-        session.write("HI, I'M " + uuid);
+        session.write("HI, I'M " + session.getAttribute(SESSION_ID));
     }
 
     @Override

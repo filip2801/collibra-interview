@@ -3,7 +3,8 @@ package com.hexagon_software.collibra.interview.config;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
-import com.hexagon_software.collibra.interview.adapter.CollibraIoAdapter;
+import com.hexagon_software.collibra.interview.adapter.CollibraIoHandler;
+import com.hexagon_software.collibra.interview.session.SessionIdFilter;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.service.IoHandler;
@@ -37,22 +38,13 @@ public class MinaConfiguration {
     }
 
     @Bean
-    DefaultIoFilterChainBuilder filterChainBuilder(LoggingFilter loggingFilter, ProtocolCodecFilter codecFilter) {
+    DefaultIoFilterChainBuilder filterChainBuilder(ProtocolCodecFilter codecFilter) {
         DefaultIoFilterChainBuilder filterChainBuilder = new DefaultIoFilterChainBuilder();
+        filterChainBuilder.addLast("sessionIdFilter", new SessionIdFilter());
         filterChainBuilder.addLast("codecFilter", codecFilter);
-        filterChainBuilder.addLast("loggingFilter", loggingFilter);
+        filterChainBuilder.addLast("loggingFilter", new LoggingFilter());
 
         return filterChainBuilder;
-    }
-
-    @Bean
-    IoHandler ioHandler() {
-        return new CollibraIoAdapter();
-    }
-
-    @Bean
-    LoggingFilter loggingFilter() {
-        return new LoggingFilter();
     }
 
     @Bean

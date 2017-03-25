@@ -1,5 +1,6 @@
 package com.hexagon_software.collibra.interview.config
 
+import com.hexagon_software.collibra.interview.session.SessionIdFilter
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder
 import org.apache.mina.core.service.IoHandler
 import org.apache.mina.core.session.IdleStatus
@@ -13,13 +14,13 @@ class MinaConfigurationSpec extends Specification {
 
     def "should create filter chain builder"() {
         given:
-        def loggingFilter = new LoggingFilter()
         def codecFilter = Mock(ProtocolCodecFilter)
 
         when:
-        def chain = minaConfiguration.filterChainBuilder(loggingFilter, codecFilter)
+        def chain = minaConfiguration.filterChainBuilder(codecFilter)
 
         then:
+        chain.getEntry(SessionIdFilter)
         chain.getEntry(LoggingFilter)
         chain.getEntry(ProtocolCodecFilter)
     }
