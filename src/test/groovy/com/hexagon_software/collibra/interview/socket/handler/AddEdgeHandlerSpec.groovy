@@ -4,7 +4,6 @@ import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
 import com.hexagon_software.collibra.interview.graph.model.NodeName
 import org.apache.mina.core.session.IoSession
-import org.junit.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
