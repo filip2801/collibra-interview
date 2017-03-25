@@ -15,20 +15,20 @@ public class Graph {
     /**
      * Add node to graph.
      *
-     * @param node node
+     * @param nodeName node name
      * @return <code>true</code> if node added, <code>false</code> if node not added because node with same name already exists
      */
-    boolean addNode(Node node) {
-        Optional<Node> foundNode = findNodeByName(node.getName());
+    boolean addNode(NodeName nodeName) {
+        Optional<Node> foundNode = findNodeByName(nodeName);
 
         if (!foundNode.isPresent()) {
-            nodes.add(node);
+            nodes.add(new Node(nodeName));
         }
 
         return !foundNode.isPresent();
     }
 
-    private Optional<Node> findNodeByName(String name) {
+    private Optional<Node> findNodeByName(NodeName name) {
         return nodes.stream()
                 .filter(n -> n.getName().equals(name))
                 .findAny();

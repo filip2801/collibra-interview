@@ -15,8 +15,8 @@ class GraphRepositorySpec extends Specification {
     @Unroll
     def "should #addOrNot node"() {
         given:
-        def nodeName = 'name'
-        graph.addNode(new Node(nodeName)) >> wasAdded
+        def nodeName = new NodeName('name')
+        graph.addNode(nodeName) >> wasAdded
 
         expect:
         repository.addNode(nodeName) == wasAdded

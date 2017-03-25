@@ -8,11 +8,12 @@ class GraphSpec extends Specification {
 
     def "should add node"() {
         given:
-        def node = n('3')
+        def nodeName = new NodeName('3')
+        def node = new Node(nodeName)
         graph.nodes = nodes
 
         when:
-        def result = graph.addNode(node)
+        def result = graph.addNode(nodeName)
 
         then:
         result
@@ -24,12 +25,12 @@ class GraphSpec extends Specification {
 
     def "should not add node"() {
         given:
-        def node = n('2')
+        def nodeName = new NodeName('2')
         def nodes = [n('1'), n('2')] as Set
         graph.nodes = nodes
 
         when:
-        def result = graph.addNode(node)
+        def result = graph.addNode(nodeName)
 
         then:
         !result
@@ -37,6 +38,6 @@ class GraphSpec extends Specification {
     }
 
     Node n(String name) {
-        new Node(name)
+        new Node(new NodeName(name))
     }
 }

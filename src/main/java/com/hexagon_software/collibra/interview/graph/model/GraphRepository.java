@@ -20,9 +20,8 @@ public class GraphRepository {
      * @param nodeName node name
      * @return <code>true</code> if node added, <code>false</code> if node not added because node with same name already exists
      */
-    public synchronized boolean addNode(String nodeName) {
-        Node node = new Node(nodeName);
-        return graph.addNode(node);
+    public synchronized boolean addNode(NodeName nodeName) {
+        return graph.addNode(nodeName);
     }
 
 }

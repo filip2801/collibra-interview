@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository;
+import com.hexagon_software.collibra.interview.graph.model.NodeName;
 import lombok.AllArgsConstructor;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class AddNodeHandler extends MatchedByPatternHandler {
 
     @Override
     protected void handleMessage(IoSession session, String message) {
-        String nodeName = getNodeName(message);
+        NodeName nodeName = getNodeName(message);
         boolean added = graphRepository.addNode(nodeName);
 
         if (added) {
@@ -33,11 +34,11 @@ public class AddNodeHandler extends MatchedByPatternHandler {
         return PATTERN;
     }
 
-    private String getNodeName(String message) {
+    private NodeName getNodeName(String message) {
         Matcher matcher = PATTERN.matcher(message);
         matcher.find();
 
-        return matcher.group(1);
+        return new NodeName(matcher.group(1));
     }
 
 }
