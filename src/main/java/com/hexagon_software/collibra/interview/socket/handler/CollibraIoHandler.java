@@ -5,19 +5,19 @@ import java.util.Set;
 
 import com.hexagon_software.collibra.interview.socket.attribute.AttributeNames;
 import com.hexagon_software.collibra.interview.socket.attribute.Client;
+import com.hexagon_software.collibra.interview.socket.writer.SessionEndingMessageWriter;
+import lombok.AllArgsConstructor;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
+@AllArgsConstructor
 @Component
 public class CollibraIoHandler extends IoHandlerAdapter {
 
     private final Set<MessageHandler> handlers;
-
-    public CollibraIoHandler(Set<MessageHandler> handlers) {
-        this.handlers = handlers;
-    }
+    private final SessionEndingMessageWriter sessionEndingWritter;
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
@@ -48,9 +48,7 @@ public class CollibraIoHandler extends IoHandlerAdapter {
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
         super.sessionIdle(session, status);
 
-        long sessionTime = System.currentTimeMillis() - session.getCreationTime();
-        Client client = (Client) session.getAttribute(AttributeNames.CLIENT);
-        session.write("BYE " + client + ", WE SPOKE FOR " + sessionTime + " MS");
+        sessionEndingWritter.write(session);
     }
 
 }

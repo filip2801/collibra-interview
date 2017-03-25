@@ -3,6 +3,7 @@ package com.hexagon_software.collibra.interview.socket.handler
 import com.hexagon_software.collibra.interview.socket.attribute.AttributeNames
 import com.hexagon_software.collibra.interview.socket.attribute.Client
 import com.hexagon_software.collibra.interview.socket.session.SessionId
+import com.hexagon_software.collibra.interview.socket.writer.SessionEndingMessageWriter
 import org.apache.mina.core.session.IdleStatus
 import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
@@ -15,6 +16,7 @@ class CollibraIoHandlerSpec extends Specification {
     def session
     def matchingHandler
     def notMatchedHandler
+    def sessionEndingWriter
 
     def unsupportedMessageResponse = 'SORRY, I DIDN’T UNDERSTAND THAT'
 
@@ -22,8 +24,9 @@ class CollibraIoHandlerSpec extends Specification {
         matchingHandler = new MatchingHandler()
         notMatchedHandler = new NotMatchedHandler()
         session = Mock(IoSession)
+        sessionEndingWriter = Mock(SessionEndingMessageWriter)
 
-        handler = new CollibraIoHandler([matchingHandler, notMatchedHandler] as Set)
+        handler = new CollibraIoHandler([matchingHandler, notMatchedHandler] as Set, sessionEndingWriter)
     }
 
     def "should write message after session opening"() {
@@ -38,21 +41,12 @@ class CollibraIoHandlerSpec extends Specification {
         1 * session.write('HI, I\'M ' + sessionId)
     }
 
-    def "should write message when session idle time exceeded"() {
-        given:
-        def client = new Client("R2D2")
-        def pattern = Pattern.compile('BYE ' + client + ', WE SPOKE FOR (\\d)+ MS')
-
-        session.getCreationTime() >> System.currentTimeMillis()
-        session.getAttribute(AttributeNames.CLIENT) >> client
-
+    def "should delegate sessionEndingWriter when session idle time exceeded"() {
         when:
         handler.sessionIdle(session, IdleStatus.READER_IDLE)
 
         then:
-        1 * session.write({
-            pattern.matcher(it).matches()
-        })
+        1 * sessionEndingWriter.write(session)
     }
 
     def "should handle message"() {
