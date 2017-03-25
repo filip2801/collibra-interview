@@ -1,16 +1,23 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
-import lombok.NonNull;
 import lombok.Value;
+import org.apache.commons.lang3.Validate;
 
 @Value
 public class Edge {
 
-    @NonNull
     Node start;
-    @NonNull
     Node end;
-    @NonNull
     int weight;
+
+    public Edge(Node start, Node end, int weight) {
+        Validate.notNull(start, "start is null");
+        Validate.notNull(end, "end is null");
+        Validate.isTrue(weight >= 0, "weight is negative");
+
+        this.start = start;
+        this.end = end;
+        this.weight = weight;
+    }
 
 }
