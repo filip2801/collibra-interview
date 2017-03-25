@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
+
 public class Graph {
 
     private Set<Node> nodes;
@@ -26,6 +28,24 @@ public class Graph {
         }
 
         return !foundNode.isPresent();
+    }
+
+    boolean addEdge(AddEdgeCommand command) {
+        Optional<Node> start = findNodeByName(command.getStart());
+        if (start.isPresent()) {
+            Optional<Node> end = findNodeByName(command.getEnd());
+
+            if (end.isPresent()) {
+                Node startNode = start.get();
+                startNode.addEdge(end.get(), command.getWeight());
+
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     private Optional<Node> findNodeByName(NodeName name) {

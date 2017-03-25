@@ -2,6 +2,7 @@ package com.hexagon_software.collibra.interview.graph.model;
 
 import javax.annotation.PostConstruct;
 
+import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -22,6 +23,10 @@ public class GraphRepository {
      */
     public synchronized boolean addNode(NodeName nodeName) {
         return graph.addNode(nodeName);
+    }
+
+    public synchronized boolean addEdge(AddEdgeCommand command) {
+        return graph.addEdge(command);
     }
 
 }

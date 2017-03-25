@@ -4,9 +4,13 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value
-public class NodeName {
+public class Edge {
 
     @NonNull
-    String value;
+    Node start;
+    @NonNull
+    Node end;
+    @NonNull
+    int weight;
 
 }
