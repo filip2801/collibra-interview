@@ -5,17 +5,21 @@ import java.util.Objects;
 import java.util.Set;
 
 import lombok.NonNull;
+import org.apache.commons.lang3.Validate;
 
 public class Node {
 
     @NonNull
     private final NodeName name;
     @NonNull
-    private final Set<Edge> edges;
+    private final Set<Edge> outgoingEdges;
+    @NonNull
+    private final Set<Edge> incomingEdges;
 
     public Node(NodeName name) {
         this.name = name;
-        this.edges = new HashSet<>();
+        this.outgoingEdges = new HashSet<>();
+        this.incomingEdges = new HashSet<>();
     }
 
     public NodeName getName() {
@@ -24,7 +28,15 @@ public class Node {
 
     void addEdge(Node end, int weight) {
         Edge edge = new Edge(this, end, weight);
-        edges.add(edge);
+
+        outgoingEdges.add(edge);
+        end.addIncomingEdge(edge);
+    }
+
+    private void addIncomingEdge(Edge edge) {
+        Validate.isTrue(edge.getEnd().equals(this), "end node does not equal to this");
+
+        incomingEdges.add(edge);
     }
 
     @Override
