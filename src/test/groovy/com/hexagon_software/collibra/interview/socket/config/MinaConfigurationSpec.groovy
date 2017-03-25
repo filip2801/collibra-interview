@@ -1,6 +1,6 @@
-package com.hexagon_software.collibra.interview.config
+package com.hexagon_software.collibra.interview.socket.config
 
-import com.hexagon_software.collibra.interview.session.SessionIdFilter
+import com.hexagon_software.collibra.interview.socket.session.session.SessionIdFilter
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder
 import org.apache.mina.core.service.IoHandler
 import org.apache.mina.core.session.IdleStatus

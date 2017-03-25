@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.adapter;
+package com.hexagon_software.collibra.interview.socket.handler;
 
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
