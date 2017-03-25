@@ -1,14 +1,17 @@
 package com.hexagon_software.collibra.interview.socket.handler;
 
 import com.hexagon_software.collibra.interview.socket.attribute.AttributeNames;
-import com.hexagon_software.collibra.interview.socket.attribute.Client;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CollibraIoHandler extends IoHandlerAdapter {
+
+    @Autowired
+    private InvitationMessageHandler invitationMessageHandler;
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
@@ -23,11 +26,7 @@ public class CollibraIoHandler extends IoHandlerAdapter {
 
         String msg = (String) message;
         if (msg.startsWith("HI, I'M ")) {
-            String name = msg.substring(8);
-
-            session.setAttribute(AttributeNames.CLIENT, new Client(name));
-
-            session.write("HI " + name);
+            invitationMessageHandler.handle(session, message);
         } else {
             session.write("SORRY, I DIDN’T UNDERSTAND THAT");
         }
