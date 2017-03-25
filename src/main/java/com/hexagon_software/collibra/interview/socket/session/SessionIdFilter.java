@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.session.session;
+package com.hexagon_software.collibra.interview.socket.session;
 
 import com.hexagon_software.collibra.interview.socket.handler.CollibraIoHandler;
 import org.apache.mina.core.filterchain.IoFilterAdapter;

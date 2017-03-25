@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.session.session;
+package com.hexagon_software.collibra.interview.socket.session;
 
 import java.util.Objects;
 import java.util.UUID;
