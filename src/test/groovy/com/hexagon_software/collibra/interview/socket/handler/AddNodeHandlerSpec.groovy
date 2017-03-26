@@ -39,7 +39,7 @@ class AddNodeHandlerSpec extends Specification {
         graphRepository.addNode(_) >> wasAdded
 
         when:
-        handler.handleMessage(session, 'ADD NODE 1')
+        handler.handle(session, 'ADD NODE 1')
 
         then:
         1 * session.write(message)

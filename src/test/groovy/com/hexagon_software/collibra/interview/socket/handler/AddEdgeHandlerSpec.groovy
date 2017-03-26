@@ -46,7 +46,7 @@ class AddEdgeHandlerSpec extends Specification {
         graphRepository.addEdge(command) >> wasAdded
 
         when:
-        handler.handleMessage(session, 'ADD EDGE node-1 node-2 10')
+        handler.handle(session, 'ADD EDGE node-1 node-2 10')
 
         then:
         1 * session.write(message)

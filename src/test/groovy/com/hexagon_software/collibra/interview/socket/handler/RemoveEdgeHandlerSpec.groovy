@@ -42,7 +42,7 @@ class RemoveEdgeHandlerSpec extends Specification {
         def command = new RemoveEdgeCommand(new NodeName('node-1'), new NodeName('node-2'))
 
         when:
-        handler.handleMessage(session, 'REMOVE EDGE node-1 node-2')
+        handler.handle(session, 'REMOVE EDGE node-1 node-2')
 
         then:
         1 * session.write('EDGE REMOVED')
@@ -56,7 +56,7 @@ class RemoveEdgeHandlerSpec extends Specification {
         graphRepository.removeEdges(command) >> { throw new NodeNotFound() }
 
         when:
-        handler.handleMessage(session, 'REMOVE EDGE node-1 node-2')
+        handler.handle(session, 'REMOVE EDGE node-1 node-2')
 
         then:
         1 * session.write('ERROR: NODE NOT FOUND')

@@ -40,7 +40,7 @@ class RemoveNodeHandlerSpec extends Specification {
         graphRepository.removeNode(new NodeName('node-1')) >> wasRemoved
 
         when:
-        handler.handleMessage(session, 'REMOVE NODE node-1')
+        handler.handle(session, 'REMOVE NODE node-1')
 
         then:
         1 * session.write(message)

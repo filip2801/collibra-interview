@@ -45,7 +45,7 @@ class ShortestPathHandlerSpec extends Specification {
         graphRepository.shortestPath(command) >> weight
 
         when:
-        handler.handleMessage(session, 'SHORTEST PATH node-1 node-2')
+        handler.handle(session, 'SHORTEST PATH node-1 node-2')
 
         then:
         1 * session.write(weight)
@@ -58,7 +58,7 @@ class ShortestPathHandlerSpec extends Specification {
         graphRepository.shortestPath(command) >> { throw new NodeNotFound() }
 
         when:
-        handler.handleMessage(session, 'SHORTEST PATH node-1 node-2')
+        handler.handle(session, 'SHORTEST PATH node-1 node-2')
 
         then:
         1 * session.write('ERROR: NODE NOT FOUND')

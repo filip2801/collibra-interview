@@ -45,7 +45,7 @@ class CloserThanRequestHandlerSpec extends Specification {
         graphRepository.closerThan(command) >> [node('a'), node('c'), node('d'), node('b')]
 
         when:
-        handler.handleMessage(session, 'CLOSER THAN 10 node-1')
+        handler.handle(session, 'CLOSER THAN 10 node-1')
 
         then:
         1 * session.write('a,b,c,d')
@@ -58,7 +58,7 @@ class CloserThanRequestHandlerSpec extends Specification {
         graphRepository.closerThan(command) >> { throw new NodeNotFound() }
 
         when:
-        handler.handleMessage(session, 'CLOSER THAN 10 node-1')
+        handler.handle(session, 'CLOSER THAN 10 node-1')
 
         then:
         1 * session.write('ERROR: NODE NOT FOUND')
