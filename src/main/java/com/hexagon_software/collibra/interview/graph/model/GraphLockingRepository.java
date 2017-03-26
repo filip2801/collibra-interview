@@ -11,12 +11,23 @@ import com.hexagon_software.collibra.interview.graph.command.CloserThanCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
+import com.hexagon_software.collibra.interview.graph.resolver.CloserThanResolver;
+import com.hexagon_software.collibra.interview.graph.resolver.ShortestPathResolver;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class GraphLockingRepository implements GraphRepository {
 
+    private final ShortestPathResolver shortestPathResolver;
+    private final CloserThanResolver closerThanResolver;
+
     private Graph graph;
+
+    public GraphLockingRepository(ShortestPathResolver shortestPathResolver, CloserThanResolver closerThanResolver) {
+        this.shortestPathResolver = shortestPathResolver;
+        this.closerThanResolver = closerThanResolver;
+    }
+
 
     @PostConstruct
     synchronized void initGraph() {
@@ -69,30 +80,12 @@ public class GraphLockingRepository implements GraphRepository {
 
     @Override
     public synchronized int shortestPath(ShortestPathCommand command) throws NodeNotFound {
-        Optional<Node> start = graph.findNodeByName(command.getStart());
-        Optional<Node> end = graph.findNodeByName(command.getEnd());
-
-        if (start.isPresent() && end.isPresent()) {
-            return new DijkstrasAlgorithm(graph,
-                    start.get().getName(),
-                    end.get().getName())
-                    .shortestPath();
-        } else {
-            throw new NodeNotFound();
-        }
+        return shortestPathResolver.resolve(graph, command.getStart(), command.getEnd());
     }
 
     @Override
     public synchronized Set<NodeName> closerThan(CloserThanCommand command) throws NodeNotFound {
-        Optional<Node> node = graph.findNodeByName(command.getNode());
-
-        if (node.isPresent()) {
-            return new DijkstrasAlgorithm(graph,
-                    node.get().getName())
-                    .closerThan(command.getWeight());
-        } else {
-            throw new NodeNotFound();
-        }
+        return closerThanResolver.resolve(graph, command.getNode(), command.getWeight());
     }
 
 }
