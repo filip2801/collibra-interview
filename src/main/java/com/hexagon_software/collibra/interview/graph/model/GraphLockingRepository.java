@@ -23,6 +23,7 @@ public class GraphLockingRepository implements GraphRepository{
      * @param nodeName node name
      * @return <code>true</code> if node added, <code>false</code> if node not added because node with same name already exists
      */
+    @Override
     public synchronized boolean addNode(NodeName nodeName) {
         return graph.addNode(nodeName);
     }
@@ -33,6 +34,7 @@ public class GraphLockingRepository implements GraphRepository{
      * @param command add edge command
      * @return <code>true</code> if edge added, <code>false</code> if node not found
      */
+    @Override
     public synchronized boolean addEdge(AddEdgeCommand command) {
         return graph.addEdge(command);
     }
@@ -43,6 +45,7 @@ public class GraphLockingRepository implements GraphRepository{
      * @param nodeName node name
      * @return <code>true</code> if node removed, <code>false</code> if node not found
      */
+    @Override
     public synchronized boolean removeNode(NodeName nodeName) {
         return graph.removeNode(nodeName);
     }
@@ -53,6 +56,7 @@ public class GraphLockingRepository implements GraphRepository{
      * @param command remove edge command
      * @throws NodeNotFound if node not found
      */
+    @Override
     public synchronized void removeEdges(RemoveEdgeCommand command) throws NodeNotFound {
         graph.removeEdges(command);
     }
