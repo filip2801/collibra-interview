@@ -15,7 +15,7 @@ class SessionClosingMessageWriterSpec extends Specification {
     def "should write message"() {
         given:
         def client = new Client("R2D2")
-        def pattern = Pattern.compile('BYE ' + client + ', WE SPOKE FOR (\\distance)+ MS')
+        def pattern = Pattern.compile('BYE ' + client + ', WE SPOKE FOR (\\d)+ MS')
 
         session.getCreationTime() >> System.currentTimeMillis()
         session.getAttribute(AttributeNames.CLIENT) >> client
