@@ -3,7 +3,6 @@ package com.hexagon_software.collibra.interview.graph.model;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
@@ -72,9 +71,7 @@ public class Graph {
             Node start = nodeStart.get();
             Node end = nodeEnd.get();
 
-            start.getOutgoingEdges().stream()
-                    .filter(e -> e.getEnd().equals(end))
-                    .collect(Collectors.toList())
+            start.getOutgoingEdgesWithEndNode(end)
                     .forEach(e -> {
                         e.getEnd().removeIncomingEdge(e);
                         start.removeOutgoingEdge(e);

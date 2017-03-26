@@ -9,7 +9,7 @@ class NodeSpec extends Specification {
         given:
         def node = new Node(new NodeName('node'))
         def end1 = new Node(new NodeName('node-1'))
-        def end2 = new Node(new NodeName('node-1'))
+        def end2 = new Node(new NodeName('node-2'))
 
         def edge1 = new Edge(node, end1, 2)
         def edge2 = new Edge(node, end2, 10)
@@ -26,6 +26,21 @@ class NodeSpec extends Specification {
         node.incomingEdges == [] as Set
         end1.incomingEdges == [edge1] as Set
         end2.incomingEdges == [edge2] as Set
+    }
+
+    def "should return outgoing edges with end node"() {
+        given:
+        def node = new Node(new NodeName('node'))
+        def end1 = new Node(new NodeName('node-1'))
+        def end2 = new Node(new NodeName('node-2'))
+
+        def edge = new Edge(node, end1, 2)
+
+        node.addEdge(end1, 2)
+        node.addEdge(end2, 10)
+
+        expect:
+        node.getOutgoingEdgesWithEndNode(end1) == [edge] as Set
     }
 
 }

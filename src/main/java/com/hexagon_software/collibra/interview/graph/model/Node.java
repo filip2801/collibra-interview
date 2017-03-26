@@ -3,6 +3,7 @@ package com.hexagon_software.collibra.interview.graph.model;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.NonNull;
 import org.apache.commons.lang3.Validate;
@@ -27,11 +28,13 @@ public class Node {
     }
 
     Set<Edge> getIncomingEdges() {
-        return incomingEdges;
+        return new HashSet<>(incomingEdges);
     }
 
-    Set<Edge> getOutgoingEdges() {
-        return outgoingEdges;
+    Set<Edge> getOutgoingEdgesWithEndNode(Node end) {
+        return outgoingEdges.stream()
+                .filter(e -> e.getEnd().equals(end))
+                .collect(Collectors.toSet());
     }
 
     void addEdge(Node end, int weight) {

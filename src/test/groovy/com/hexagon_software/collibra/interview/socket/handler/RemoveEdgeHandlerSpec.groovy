@@ -1,6 +1,5 @@
 package com.hexagon_software.collibra.interview.socket.handler
 
-import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository

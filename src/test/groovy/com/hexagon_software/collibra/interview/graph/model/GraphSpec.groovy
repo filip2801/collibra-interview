@@ -2,7 +2,6 @@ package com.hexagon_software.collibra.interview.graph.model
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -139,7 +138,7 @@ class GraphSpec extends Specification {
         def edge3 = new Edge(node2, node1, 20)
 
         graph.nodes = [node1, node2]
-        node1.getOutgoingEdges() >> [edge1, edge2]
+        node1.getOutgoingEdgesWithEndNode(node2) >> [edge1, edge2]
 
         when:
         graph.removeEdges(command)
