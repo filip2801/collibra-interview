@@ -3,8 +3,6 @@ package com.hexagon_software.collibra.interview.socket.handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hexagon_software.collibra.interview.graph.algorithm.DijkstrasAlgorithm;
-import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class ShortestPathHandler extends MatchedByPatternHandler {
+public class ShortestPathResolverHandler extends MatchedByPatternHandler {
 
     private static final Pattern PATTERN = Pattern.compile("^SHORTEST PATH ((\\w|-)+) ((\\w|-)+)$");
 

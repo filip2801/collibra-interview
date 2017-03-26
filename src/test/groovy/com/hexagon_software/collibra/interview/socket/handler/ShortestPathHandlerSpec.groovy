@@ -17,7 +17,7 @@ class ShortestPathHandlerSpec extends Specification {
     def setup() {
         session = Mock(IoSession)
         graphRepository = Mock(GraphRepository)
-        handler = new ShortestPathHandler(graphRepository)
+        handler = new ShortestPathResolverHandler(graphRepository)
     }
 
     @Unroll
