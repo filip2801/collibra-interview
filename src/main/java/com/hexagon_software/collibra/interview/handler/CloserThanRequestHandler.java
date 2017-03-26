@@ -1,6 +1,5 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
-import java.util.Comparator;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,23 +22,22 @@ public class CloserThanRequestHandler extends MatchedByPatternHandler {
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
+    protected Response handleMessage(String message) {
         CloserThanCommand command = createCommand(message);
 
         try {
             Set<NodeName> nodes = graphRepository.closerThan(command);
-            String response = createResponse(nodes);
-            session.write(response);
+            return createResponse(nodes);
         } catch (NodeNotFound e) {
-            session.write("ERROR: NODE NOT FOUND");
+            return response("ERROR: NODE NOT FOUND");
         }
     }
 
-    private String createResponse(Set<NodeName> nodes) {
-        return nodes.stream()
+    private Response createResponse(Set<NodeName> nodes) {
+        return response(nodes.stream()
                 .map(NodeName::getValue)
                 .sorted()
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining(",")));
     }
 
     @Override

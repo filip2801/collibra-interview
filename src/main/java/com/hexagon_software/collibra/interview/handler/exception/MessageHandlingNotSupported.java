@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler.exception;
 
 public class MessageHandlingNotSupported extends RuntimeException {
 

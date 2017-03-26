@@ -1,20 +1,17 @@
-package com.hexagon_software.collibra.interview.socket.handler
+package com.hexagon_software.collibra.interview.handler
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
 import com.hexagon_software.collibra.interview.graph.model.NodeName
-import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class AddEdgeHandlerSpec extends Specification {
 
     def handler
-    def session
     def graphRepository
 
     def setup() {
-        session = Mock(IoSession)
         graphRepository = Mock(GraphRepository)
         handler = new AddEdgeHandler(graphRepository)
     }
@@ -22,7 +19,7 @@ class AddEdgeHandlerSpec extends Specification {
     @Unroll
     def "should #supportOrNot message #message"() {
         expect:
-        handler.isSupported(session, message) == supported
+        handler.isSupported(message) == supported
 
         where:
         message                      || supported
@@ -45,11 +42,8 @@ class AddEdgeHandlerSpec extends Specification {
         def command = new AddEdgeCommand(new NodeName('node-1'), new NodeName('node-2'), 10)
         graphRepository.addEdge(command) >> wasAdded
 
-        when:
-        handler.handle(session, 'ADD EDGE node-1 node-2 10')
-
-        then:
-        1 * session.write(message)
+        expect:
+        handler.handle('ADD EDGE node-1 node-2 10') == new Response(message)
 
         where:
         wasAdded || message

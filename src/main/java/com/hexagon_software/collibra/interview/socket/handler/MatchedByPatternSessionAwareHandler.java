@@ -2,9 +2,10 @@ package com.hexagon_software.collibra.interview.socket.handler;
 
 import java.util.regex.Pattern;
 
+import com.hexagon_software.collibra.interview.handler.exception.MessageHandlingNotSupported;
 import org.apache.mina.core.session.IoSession;
 
-public abstract class MatchedByPatternHandler implements MessageHandler {
+public abstract class MatchedByPatternSessionAwareHandler implements SessionAwareMessageHandler {
 
     @Override
     public boolean isSupported(IoSession ioSession, Object message) {

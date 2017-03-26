@@ -2,7 +2,7 @@ package com.hexagon_software.collibra.interview.socket.handler;
 
 import org.apache.mina.core.session.IoSession;
 
-public interface MessageHandler {
+public interface SessionAwareMessageHandler {
 
     boolean isSupported(IoSession session, Object message);
 

@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler
+package com.hexagon_software.collibra.interview.handler
 
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
 import com.hexagon_software.collibra.interview.graph.model.NodeName
@@ -21,7 +21,7 @@ class RemoveNodeHandlerSpec extends Specification {
     @Unroll
     def "should #supportOrNot message #message"() {
         expect:
-        handler.isSupported(session, message) == supported
+        handler.isSupported(message) == supported
 
         where:
         message              || supported
@@ -39,11 +39,8 @@ class RemoveNodeHandlerSpec extends Specification {
         given:
         graphRepository.removeNode(new NodeName('node-1')) >> wasRemoved
 
-        when:
-        handler.handle(session, 'REMOVE NODE node-1')
-
-        then:
-        1 * session.write(message)
+        expect:
+        handler.handle('REMOVE NODE node-1') == new Response(message)
 
         where:
         message                 || wasRemoved

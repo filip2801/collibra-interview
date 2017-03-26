@@ -21,7 +21,7 @@ class InvitationMessageHandlerSpec extends Specification {
         where:
         message                    || supported
         'HI, I\'M ' + uuid()       || true
-        'HI, I\'M a--distance'            || true
+        'HI, I\'M a--distance'     || true
         'HI, I\'M --'              || true
         'HI, I\'M Filip'           || true
         'HI, I\'M'                 || false

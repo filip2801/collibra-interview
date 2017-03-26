@@ -1,9 +1,10 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
+import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository;
 import com.hexagon_software.collibra.interview.graph.model.NodeName;
@@ -13,21 +14,20 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class ShortestPathResolverHandler extends MatchedByPatternHandler {
+public class RemoveEdgeHandler extends MatchedByPatternHandler {
 
-    private static final Pattern PATTERN = Pattern.compile("^SHORTEST PATH ((\\w|-)+) ((\\w|-)+)$");
+    private static final Pattern PATTERN = Pattern.compile("^REMOVE EDGE ((\\w|-)+) ((\\w|-)+)$");
 
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
-        ShortestPathCommand command = createCommand(message);
-
+    protected Response handleMessage(String message) {
+        RemoveEdgeCommand command = createCommand(message);
         try {
-            int weight = graphRepository.shortestPath(command);
-            session.write(weight);
+            graphRepository.removeEdges(command);
+            return response("EDGE REMOVED");
         } catch (NodeNotFound e) {
-            session.write("ERROR: NODE NOT FOUND");
+            return response("ERROR: NODE NOT FOUND");
         }
     }
 
@@ -36,12 +36,13 @@ public class ShortestPathResolverHandler extends MatchedByPatternHandler {
         return PATTERN;
     }
 
-    private ShortestPathCommand createCommand(String message) {
+    private RemoveEdgeCommand createCommand(String message) {
         Matcher matcher = PATTERN.matcher(message);
         matcher.find();
 
-        return new ShortestPathCommand(
+        return new RemoveEdgeCommand(
                 new NodeName(matcher.group(1)),
                 new NodeName(matcher.group(3)));
     }
+
 }

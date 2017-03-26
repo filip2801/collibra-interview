@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,14 +18,14 @@ public class RemoveNodeHandler extends MatchedByPatternHandler {
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
+    protected Response handleMessage(String message) {
         NodeName nodeName = getNodeName(message);
         boolean removed = graphRepository.removeNode(nodeName);
 
         if (removed) {
-            session.write("NODE REMOVED");
+            return response("NODE REMOVED");
         } else {
-            session.write("ERROR: NODE NOT FOUND");
+            return response("ERROR: NODE NOT FOUND");
         }
     }
 

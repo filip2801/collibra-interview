@@ -11,19 +11,15 @@ class CollibraIoHandlerSpec extends Specification {
 
     def handler
     def session
-    def matchingHandler
-    def notMatchedHandler
     def sessionClosingWriter
-
-    def unsupportedMessageResponse = 'SORRY, I DIDN’T UNDERSTAND THAT'
+    def receivedMessageHandler
 
     def setup() {
-        matchingHandler = new MatchingHandler()
-        notMatchedHandler = new NotMatchedHandler()
         session = Mock(IoSession)
         sessionClosingWriter = Mock(SessionClosingMessageWriter)
+        receivedMessageHandler = Mock(ReceivedMessageHandler)
 
-        handler = new CollibraIoHandler([matchingHandler, notMatchedHandler] as Set, sessionClosingWriter)
+        handler = new CollibraIoHandler(receivedMessageHandler, sessionClosingWriter)
     }
 
     def "should write message after session opening"() {
@@ -46,52 +42,12 @@ class CollibraIoHandlerSpec extends Specification {
         1 * sessionClosingWriter.write(session)
     }
 
-    def "should handle message"() {
+    def "should delegate message handling"() {
         when:
         handler.messageReceived(session, 'OK')
 
         then:
-        1 * session.write("OK")
-        0 * session.write("Not OK")
-        0 * session.write(unsupportedMessageResponse)
-    }
-
-    def "should send response when message not supported"() {
-        when:
-        handler.messageReceived(session, 'UNKNOWN')
-
-        then:
-        1 * session.write(unsupportedMessageResponse)
-        0 * session.write("OK")
-        0 * session.write("Not OK")
-    }
-
-    class MatchingHandler implements MessageHandler {
-
-        @Override
-        boolean isSupported(IoSession session, Object message) {
-            return message == 'OK'
-        }
-
-        @Override
-        void handle(IoSession session, Object message) {
-            session.write('OK')
-        }
-
-    }
-
-    class NotMatchedHandler implements MessageHandler {
-
-        @Override
-        boolean isSupported(IoSession session, Object message) {
-            return false
-        }
-
-        @Override
-        void handle(IoSession session, Object message) {
-            session.write('NOT OK')
-        }
-
+        1 * receivedMessageHandler.handle(session, 'OK')
     }
 
 }

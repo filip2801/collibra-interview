@@ -9,7 +9,7 @@ import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InvitationHandler extends MatchedByPatternHandler {
+public class InvitationHandler extends MatchedByPatternSessionAwareHandler {
 
     private static final Pattern PATTERN = Pattern.compile("^HI, I'M ((\\w|-)+)$");
 
