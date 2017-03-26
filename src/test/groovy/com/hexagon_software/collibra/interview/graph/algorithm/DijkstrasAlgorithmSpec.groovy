@@ -53,7 +53,7 @@ class DijkstrasAlgorithmSpec extends Specification {
         resolver = new DijkstrasAlgorithm(graph, startNode, destination)
 
         expect:
-        resolver.resolve() == weight
+        resolver.shortestPath() == weight
 
         where:
         destination        || weight

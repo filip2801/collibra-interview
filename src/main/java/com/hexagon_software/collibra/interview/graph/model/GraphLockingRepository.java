@@ -1,11 +1,13 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import com.hexagon_software.collibra.interview.graph.algorithm.DijkstrasAlgorithm;
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.command.CloserThanCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
@@ -74,7 +76,20 @@ public class GraphLockingRepository implements GraphRepository {
             return new DijkstrasAlgorithm(graph,
                     start.get().getName(),
                     end.get().getName())
-                    .resolve();
+                    .shortestPath();
+        } else {
+            throw new NodeNotFound();
+        }
+    }
+
+    @Override
+    public synchronized Set<NodeName> closerThan(CloserThanCommand command) throws NodeNotFound {
+        Optional<Node> node = graph.findNodeByName(command.getNode());
+
+        if (node.isPresent()) {
+            return new DijkstrasAlgorithm(graph,
+                    node.get().getName())
+                    .closerThan(command.getWeight());
         } else {
             throw new NodeNotFound();
         }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.hexagon_software.collibra.interview.graph.model.Graph;
 import com.hexagon_software.collibra.interview.graph.model.Node;
@@ -13,11 +14,12 @@ import com.hexagon_software.collibra.interview.graph.model.NodeName;
 public class DijkstrasAlgorithm {
 
     private final Node start;
-    private final Node end;
     private final Set<Node> unknown;
     private final Set<Node> processed;
     private final Map<Node, Integer> distance;
     private final Map<Node, Node> previous;
+
+    private Node end;
 
     public DijkstrasAlgorithm(Graph graph, NodeName start, NodeName end) {
         this.start = graph.findNodeByName(start).get();
@@ -28,15 +30,36 @@ public class DijkstrasAlgorithm {
         previous = new HashMap<>();
     }
 
-    public int resolve() {
+    public DijkstrasAlgorithm(Graph graph, NodeName node) {
+        this.start = graph.findNodeByName(node).get();
+        unknown = graph.getNodes();
+        processed = new HashSet<>();
+        distance = initDistances(this.unknown, this.start);
+        previous = new HashMap<>();
+    }
+
+    public int shortestPath() {
+        resolve();
+        return distance.get(end);
+    }
+
+    public Set<NodeName> closerThan(int weight) {
+        resolve();
+        return distance.entrySet()
+                .stream()
+                .filter(e -> e.getValue() < weight)
+                .filter(e -> !e.getKey().equals(start))
+                .map(e -> e.getKey().getName())
+                .collect(Collectors.toSet());
+    }
+
+    private void resolve() {
         while (!unknown.isEmpty()) {
             Node nearest = findNearestFromQ();
             unknown.remove(nearest);
             processed.add(nearest);
             updatePreviouses(nearest);
         }
-
-        return distance.get(end);
     }
 
     private void updatePreviouses(Node node) {

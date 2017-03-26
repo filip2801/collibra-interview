@@ -1,6 +1,5 @@
 package com.hexagon_software.collibra.interview.socket.handler
 
-import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
@@ -8,7 +7,6 @@ import com.hexagon_software.collibra.interview.graph.model.NodeName
 import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 class ShortestPathHandlerSpec extends Specification {
 

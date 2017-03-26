@@ -1,6 +1,9 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
+import java.util.Set;
+
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.command.CloserThanCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
@@ -40,5 +43,7 @@ public interface GraphRepository {
     void removeEdges(RemoveEdgeCommand command) throws NodeNotFound;
 
     int shortestPath(ShortestPathCommand command) throws NodeNotFound;
+
+    Set<NodeName> closerThan(CloserThanCommand command) throws NodeNotFound;
 
 }
