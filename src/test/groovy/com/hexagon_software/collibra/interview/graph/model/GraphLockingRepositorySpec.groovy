@@ -1,15 +1,24 @@
 package com.hexagon_software.collibra.interview.graph.model
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
+import com.hexagon_software.collibra.interview.graph.resolver.CloserThanResolver
+import com.hexagon_software.collibra.interview.graph.resolver.ShortestPathResolver
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class GraphLockingRepositorySpec extends Specification {
 
-    def repository = new GraphLockingRepository()
-    def graph = Mock(Graph)
+    def repository
+    def shortestPathResolver
+    def closerThanResolver
+    def graph
 
     def setup() {
+        shortestPathResolver = Mock(ShortestPathResolver)
+        closerThanResolver = Mock(CloserThanResolver)
+        repository = new GraphLockingRepository(shortestPathResolver, closerThanResolver)
+
+        graph = Mock(Graph)
         repository.graph = graph
     }
 
