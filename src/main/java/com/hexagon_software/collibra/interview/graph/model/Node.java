@@ -30,6 +30,10 @@ public class Node {
         return incomingEdges;
     }
 
+    Set<Edge> getOutgoingEdges() {
+        return outgoingEdges;
+    }
+
     void addEdge(Node end, int weight) {
         Edge edge = new Edge(this, end, weight);
 
@@ -44,7 +48,11 @@ public class Node {
     }
 
     void removeIncomingEdge(Edge edge) {
+        incomingEdges.remove(edge);
+    }
 
+    public void removeOutgoingEdge(Edge edge) {
+        outgoingEdges.remove(edge);
     }
 
     @Override

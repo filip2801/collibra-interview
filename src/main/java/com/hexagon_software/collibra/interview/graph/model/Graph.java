@@ -3,8 +3,11 @@ package com.hexagon_software.collibra.interview.graph.model;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 
 public class Graph {
 
@@ -59,6 +62,26 @@ public class Graph {
         }
 
         return optional.isPresent();
+    }
+
+    synchronized void removeEdges(RemoveEdgeCommand command) throws NodeNotFound {
+        Optional<Node> nodeStart = findNodeByName(command.getStart());
+        Optional<Node> nodeEnd = findNodeByName(command.getEnd());
+
+        if (nodeStart.isPresent() && nodeEnd.isPresent()) {
+            Node start = nodeStart.get();
+            Node end = nodeEnd.get();
+
+            start.getOutgoingEdges().stream()
+                    .filter(e -> e.getEnd().equals(end))
+                    .collect(Collectors.toList())
+                    .forEach(e -> {
+                        e.getEnd().removeIncomingEdge(e);
+                        start.removeOutgoingEdge(e);
+                    });
+        } else {
+            throw new NodeNotFound();
+        }
     }
 
     private Optional<Node> findNodeByName(NodeName name) {

@@ -3,6 +3,8 @@ package com.hexagon_software.collibra.interview.graph.model;
 import javax.annotation.PostConstruct;
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -31,6 +33,10 @@ public class GraphRepository {
 
     public synchronized boolean removeNode(NodeName nodeName) {
         return graph.removeNode(nodeName);
+    }
+
+    public synchronized void removeEdges(RemoveEdgeCommand command) throws NodeNotFound {
+        graph.removeEdges(command);
     }
 
 }

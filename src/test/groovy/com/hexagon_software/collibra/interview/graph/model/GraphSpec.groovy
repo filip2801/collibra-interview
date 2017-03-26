@@ -1,6 +1,7 @@
 package com.hexagon_software.collibra.interview.graph.model
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
+import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -125,6 +126,33 @@ class GraphSpec extends Specification {
         graph.nodes == [node2, node3] as Set
         1 * node2.removeIncomingEdge(edgeTo2)
         1 * node3.removeIncomingEdge(edgeTo3)
+    }
+
+    def "should remove edges"() {
+        given:
+        def node1 = mockNode(new NodeName('1'))
+        def node2 = mockNode(new NodeName('2'))
+        def command = new RemoveEdgeCommand(new NodeName('1'), new NodeName('2'))
+
+        def edge1 = new Edge(node1, node2, 10)
+        def edge2 = new Edge(node1, node2, 15)
+        def edge3 = new Edge(node2, node1, 20)
+
+        graph.nodes = [node1, node2]
+        node1.getOutgoingEdges() >> [edge1, edge2]
+
+        when:
+        graph.removeEdges(command)
+
+        then:
+        1 * node1.removeOutgoingEdge(edge1)
+        1 * node1.removeOutgoingEdge(edge2)
+
+        1 * node2.removeIncomingEdge(edge1)
+        1 * node2.removeIncomingEdge(edge2)
+
+        0 * _.removeIncomingEdge(edge3)
+        0 * _.removeOutgoingEdge(edge3)
     }
 
     Node n(String name) {
