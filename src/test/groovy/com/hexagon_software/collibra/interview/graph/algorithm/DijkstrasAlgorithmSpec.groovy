@@ -25,6 +25,7 @@ class DijkstrasAlgorithmSpec extends Specification {
         def n3 = nodeName('node-3')
         def n4 = nodeName('node-4')
         def n5 = nodeName('node-5')
+        def n6 = nodeName('node-6')
 
         graph.addNode(n0)
         graph.addNode(n1)
@@ -32,6 +33,7 @@ class DijkstrasAlgorithmSpec extends Specification {
         graph.addNode(n3)
         graph.addNode(n4)
         graph.addNode(n5)
+        graph.addNode(n6)
 
         graph.addEdge(addEdgeCmd(n0, n1, 3))
         graph.addEdge(addEdgeCmd(n0, n4, 3))
@@ -42,9 +44,6 @@ class DijkstrasAlgorithmSpec extends Specification {
         graph.addEdge(addEdgeCmd(n4, n5, 2))
         graph.addEdge(addEdgeCmd(n5, n0, 6))
         graph.addEdge(addEdgeCmd(n5, n3, 1))
-
-        def n6 = nodeName('node-6')
-        graph.addNode(n6)
         graph.addEdge(addEdgeCmd(n6, n3, 10))
     }
 
@@ -65,7 +64,6 @@ class DijkstrasAlgorithmSpec extends Specification {
         nodeName('node-4') || 3
         nodeName('node-5') || 5
         nodeName('node-6') || Integer.MAX_VALUE
-
     }
 
     NodeName nodeName(String name) {
