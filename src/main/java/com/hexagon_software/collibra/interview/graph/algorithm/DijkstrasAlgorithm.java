@@ -2,7 +2,6 @@ package com.hexagon_software.collibra.interview.graph.algorithm;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -31,22 +30,17 @@ public class DijkstrasAlgorithm implements DistanceToNodesResolver {
     private class Resolver {
 
         private final Set<Node> unprocessed;
-        private final Set<Node> processed;
         private final Map<Node, Integer> distance;
-        private final Map<Node, Node> previous;
 
         private Resolver(Graph graph, Node start) {
             unprocessed = graph.getNodes();
-            processed = new HashSet<>();
             distance = initDistances(unprocessed, start);
-            previous = new HashMap<>();
         }
 
         private Map<Node, Integer> resolve() {
             while (!unprocessed.isEmpty()) {
                 Node nearest = findNearestFromUnprocessed();
                 unprocessed.remove(nearest);
-                processed.add(nearest);
                 updatePreviousNodes(nearest);
             }
             return distance;
@@ -55,11 +49,8 @@ public class DijkstrasAlgorithm implements DistanceToNodesResolver {
         private void updatePreviousNodes(Node node) {
             Integer nodeWeight = distance.get(node);
             node.getOutgoingEdges().stream()
-                    .filter(e -> isaNotInfinity(nodeWeight) && distance.get(e.getEnd()) > e.getWeight() + nodeWeight)
-                    .forEach(e -> {
-                        distance.put(e.getEnd(), e.getWeight() + nodeWeight);
-                        previous.put(e.getEnd(), node);
-                    });
+                    .filter(e -> isNotInfinity(nodeWeight) && distance.get(e.getEnd()) > e.getWeight() + nodeWeight)
+                    .forEach(e -> distance.put(e.getEnd(), e.getWeight() + nodeWeight));
         }
 
         private Node findNearestFromUnprocessed() {
@@ -78,7 +69,7 @@ public class DijkstrasAlgorithm implements DistanceToNodesResolver {
 
     }
 
-    private boolean isaNotInfinity(Integer nodeWeight) {
+    private boolean isNotInfinity(Integer nodeWeight) {
         return !nodeWeight.equals(INFINITY);
     }
 
