@@ -1,7 +1,10 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 
+import com.hexagon_software.collibra.interview.graph.algorithm.DijkstrasAlgorithm;
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
@@ -9,7 +12,7 @@ import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GraphLockingRepository implements GraphRepository{
+public class GraphLockingRepository implements GraphRepository {
 
     private Graph graph;
 
@@ -63,8 +66,18 @@ public class GraphLockingRepository implements GraphRepository{
     }
 
     @Override
-    public int shortestPath(ShortestPathCommand command) throws NodeNotFound {
-        return Integer.MAX_VALUE;
+    public synchronized int shortestPath(ShortestPathCommand command) throws NodeNotFound {
+        Optional<Node> start = graph.findNodeByName(command.getStart());
+        Optional<Node> end = graph.findNodeByName(command.getEnd());
+
+        if (start.isPresent() && end.isPresent()) {
+            return new DijkstrasAlgorithm(graph,
+                    start.get().getName(),
+                    end.get().getName())
+                    .resolve();
+        } else {
+            throw new NodeNotFound();
+        }
     }
 
 }

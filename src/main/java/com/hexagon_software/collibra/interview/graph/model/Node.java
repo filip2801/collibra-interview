@@ -37,6 +37,10 @@ public class Node {
                 .collect(Collectors.toSet());
     }
 
+    public Set<Edge> getOutgoingEdges() {
+        return new HashSet<>(outgoingEdges);
+    }
+
     void addEdge(Node end, int weight) {
         Edge edge = new Edge(this, end, weight);
 

@@ -16,6 +16,10 @@ public class Graph {
         nodes = new HashSet<>();
     }
 
+    public Set<Node> getNodes() {
+        return new HashSet<>(nodes);
+    }
+
     /**
      * Add node to graph.
      *
@@ -81,7 +85,7 @@ public class Graph {
         }
     }
 
-    private Optional<Node> findNodeByName(NodeName name) {
+    public Optional<Node> findNodeByName(NodeName name) {
         return nodes.stream()
                 .filter(n -> n.getName().equals(name))
                 .findAny();
