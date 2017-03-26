@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
+import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import org.springframework.stereotype.Repository;
 
@@ -59,6 +60,11 @@ public class GraphLockingRepository implements GraphRepository{
     @Override
     public synchronized void removeEdges(RemoveEdgeCommand command) throws NodeNotFound {
         graph.removeEdges(command);
+    }
+
+    @Override
+    public int shortestPath(ShortestPathCommand command) throws NodeNotFound {
+        return Integer.MAX_VALUE;
     }
 
 }
