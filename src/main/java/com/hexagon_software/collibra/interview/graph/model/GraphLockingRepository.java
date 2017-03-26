@@ -1,10 +1,21 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
+import javax.annotation.PostConstruct;
+
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
+import org.springframework.stereotype.Repository;
 
-public interface GraphRepository {
+@Repository
+public class GraphLockingRepository implements GraphRepository{
+
+    private Graph graph;
+
+    @PostConstruct
+    synchronized void initGraph() {
+        graph = new Graph();
+    }
 
     /**
      * Add node to graph.
@@ -12,7 +23,9 @@ public interface GraphRepository {
      * @param nodeName node name
      * @return <code>true</code> if node added, <code>false</code> if node not added because node with same name already exists
      */
-    boolean addNode(NodeName nodeName);
+    public synchronized boolean addNode(NodeName nodeName) {
+        return graph.addNode(nodeName);
+    }
 
     /**
      * Add edge to graph.
@@ -20,7 +33,9 @@ public interface GraphRepository {
      * @param command add edge command
      * @return <code>true</code> if edge added, <code>false</code> if node not found
      */
-    boolean addEdge(AddEdgeCommand command);
+    public synchronized boolean addEdge(AddEdgeCommand command) {
+        return graph.addEdge(command);
+    }
 
     /**
      * Remove node from graph.
@@ -28,7 +43,9 @@ public interface GraphRepository {
      * @param nodeName node name
      * @return <code>true</code> if node removed, <code>false</code> if node not found
      */
-    boolean removeNode(NodeName nodeName);
+    public synchronized boolean removeNode(NodeName nodeName) {
+        return graph.removeNode(nodeName);
+    }
 
     /**
      * Remove edge from graph.
@@ -36,6 +53,8 @@ public interface GraphRepository {
      * @param command remove edge command
      * @throws NodeNotFound if node not found
      */
-    void removeEdges(RemoveEdgeCommand command) throws NodeNotFound;
+    public synchronized void removeEdges(RemoveEdgeCommand command) throws NodeNotFound {
+        graph.removeEdges(command);
+    }
 
 }

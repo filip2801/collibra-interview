@@ -4,9 +4,9 @@ import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class GraphRepositorySpec extends Specification {
+class GraphLockingRepositorySpec extends Specification {
 
-    def repository = new GraphRepository()
+    def repository = new GraphLockingRepository()
     def graph = Mock(Graph)
 
     def setup() {
