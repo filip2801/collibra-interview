@@ -29,7 +29,7 @@ public class DijkstrasAlgorithm {
     }
 
     public int resolve() {
-        while(!unknown.isEmpty()) {
+        while (!unknown.isEmpty()) {
             Node nearest = findNearestFromQ();
             unknown.remove(nearest);
             processed.add(nearest);
