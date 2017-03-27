@@ -1,11 +1,9 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
-import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import com.hexagon_software.collibra.interview.graph.algorithm.DijkstrasAlgorithm;
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.CloserThanCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
@@ -16,7 +14,7 @@ import com.hexagon_software.collibra.interview.graph.resolver.ShortestPathResolv
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GraphLockingRepository implements GraphRepository {
+class GraphLockingRepository implements GraphRepository {
 
     private final ShortestPathResolver shortestPathResolver;
     private final CloserThanResolver closerThanResolver;
@@ -28,51 +26,26 @@ public class GraphLockingRepository implements GraphRepository {
         this.closerThanResolver = closerThanResolver;
     }
 
-
     @PostConstruct
     synchronized void initGraph() {
         graph = new Graph();
     }
 
-    /**
-     * Add node to graph.
-     *
-     * @param nodeName node name
-     * @return <code>true</code> if node added, <code>false</code> if node not added because node with same name already exists
-     */
     @Override
     public synchronized boolean addNode(NodeName nodeName) {
         return graph.addNode(nodeName);
     }
 
-    /**
-     * Add edge to graph.
-     *
-     * @param command add edge command
-     * @return <code>true</code> if edge added, <code>false</code> if node not found
-     */
     @Override
     public synchronized boolean addEdge(AddEdgeCommand command) {
         return graph.addEdge(command);
     }
 
-    /**
-     * Remove node from graph.
-     *
-     * @param nodeName node name
-     * @return <code>true</code> if node removed, <code>false</code> if node not found
-     */
     @Override
     public synchronized boolean removeNode(NodeName nodeName) {
         return graph.removeNode(nodeName);
     }
 
-    /**
-     * Remove edge from graph.
-     *
-     * @param command remove edge command
-     * @throws NodeNotFound if node not found
-     */
     @Override
     public synchronized void removeEdges(RemoveEdgeCommand command) throws NodeNotFound {
         graph.removeEdges(command);
