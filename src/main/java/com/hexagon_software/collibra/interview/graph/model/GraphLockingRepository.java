@@ -11,6 +11,7 @@ import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import com.hexagon_software.collibra.interview.graph.resolver.CloserThanResolver;
 import com.hexagon_software.collibra.interview.graph.resolver.ShortestPathResolver;
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -27,7 +28,8 @@ class GraphLockingRepository implements GraphRepository {
     }
 
     @PostConstruct
-    synchronized void initGraph() {
+    @SuppressWarnings("IS2_INCONSISTENT_SYNC")
+    void initGraph() {
         graph = new Graph();
     }
 
