@@ -15,6 +15,7 @@ class MinaConfigurationSpec extends Specification {
     def "should create filter chain builder"() {
         given:
         def codecFilter = Mock(ProtocolCodecFilter)
+        minaConfiguration.logMessages = true
 
         when:
         def chain = minaConfiguration.filterChainBuilder(codecFilter)

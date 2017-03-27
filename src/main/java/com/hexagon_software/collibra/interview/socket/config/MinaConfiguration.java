@@ -25,6 +25,9 @@ public class MinaConfiguration {
     @Value("${socket.idle.reader}")
     private int readerIdle;
 
+    @Value("${socket.logMessages}")
+    private boolean logMessages;
+
     @Bean(initMethod = "bind", destroyMethod = "unbind")
     IoAcceptor ioAcceptor(DefaultIoFilterChainBuilder filterChainBuilder, IoHandler handler) {
         IoAcceptor ioAcceptor = new NioSocketAcceptor();
@@ -41,7 +44,10 @@ public class MinaConfiguration {
         DefaultIoFilterChainBuilder filterChainBuilder = new DefaultIoFilterChainBuilder();
         filterChainBuilder.addLast("sessionIdFilter", new SessionIdFilter());
         filterChainBuilder.addLast("codecFilter", codecFilter);
-        filterChainBuilder.addLast("loggingFilter", new LoggingFilter());
+
+        if (logMessages) {
+            filterChainBuilder.addLast("loggingFilter", new LoggingFilter());
+        }
 
         return filterChainBuilder;
     }
