@@ -1,11 +1,9 @@
 package com.hexagon_software.collibra.interview.graph.model;
 
-import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import com.hexagon_software.collibra.interview.graph.algorithm.DijkstrasAlgorithm;
 import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.CloserThanCommand;
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand;
