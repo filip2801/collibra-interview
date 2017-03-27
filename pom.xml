@@ -8,6 +8,12 @@
     <artifactId>collibra-interview</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <scm>
+        <url>https://gitlab.com/hexagon-software/collibra-interview/tree/master</url>
+        <developerConnection>scm:git:git@gitlab.com:hexagon-software/collibra-interview.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <checkstyle.rules.path>checkstyle/checks.xml</checkstyle.rules.path>
 
