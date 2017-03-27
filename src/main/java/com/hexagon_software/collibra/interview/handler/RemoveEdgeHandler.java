@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,13 +21,13 @@ public class RemoveEdgeHandler extends MatchedByPatternHandler {
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
+    protected Response handleMessage(String message) {
         RemoveEdgeCommand command = createCommand(message);
         try {
             graphRepository.removeEdges(command);
-            session.write("EDGE REMOVED");
+            return response("EDGE REMOVED");
         } catch (NodeNotFound e) {
-            session.write("ERROR: NODE NOT FOUND");
+            return response("ERROR: NODE NOT FOUND");
         }
     }
 

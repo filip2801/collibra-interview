@@ -1,21 +1,18 @@
-package com.hexagon_software.collibra.interview.socket.handler
+package com.hexagon_software.collibra.interview.handler
 
 import com.hexagon_software.collibra.interview.graph.command.RemoveEdgeCommand
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
 import com.hexagon_software.collibra.interview.graph.model.NodeName
-import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class RemoveEdgeHandlerSpec extends Specification {
 
     def handler
-    def session
     def graphRepository
 
     def setup() {
-        session = Mock(IoSession)
         graphRepository = Mock(GraphRepository)
         handler = new RemoveEdgeHandler(graphRepository)
     }
@@ -23,7 +20,7 @@ class RemoveEdgeHandlerSpec extends Specification {
     @Unroll
     def "should #supportOrNot message #message"() {
         expect:
-        handler.isSupported(session, message) == supported
+        handler.isSupported(message) == supported
 
         where:
         message                      || supported
@@ -42,10 +39,10 @@ class RemoveEdgeHandlerSpec extends Specification {
         def command = new RemoveEdgeCommand(new NodeName('node-1'), new NodeName('node-2'))
 
         when:
-        handler.handleMessage(session, 'REMOVE EDGE node-1 node-2')
+        def result = handler.handle('REMOVE EDGE node-1 node-2')
 
         then:
-        1 * session.write('EDGE REMOVED')
+        result == new Response('EDGE REMOVED')
         1 * graphRepository.removeEdges(command)
     }
 
@@ -55,11 +52,8 @@ class RemoveEdgeHandlerSpec extends Specification {
         def command = new RemoveEdgeCommand(new NodeName('node-1'), new NodeName('node-2'))
         graphRepository.removeEdges(command) >> { throw new NodeNotFound() }
 
-        when:
-        handler.handleMessage(session, 'REMOVE EDGE node-1 node-2')
-
-        then:
-        1 * session.write('ERROR: NODE NOT FOUND')
+        expect:
+        handler.handle('REMOVE EDGE node-1 node-2') == new Response('ERROR: NODE NOT FOUND')
     }
 
 }

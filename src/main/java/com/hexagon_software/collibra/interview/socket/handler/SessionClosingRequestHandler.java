@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class SessionClosingRequestHandler extends MatchedByPatternHandler {
+public class SessionClosingRequestHandler extends MatchedByPatternSessionAwareHandler {
 
     private static final Pattern PATTERN = Pattern.compile("BYE MATE!");
 

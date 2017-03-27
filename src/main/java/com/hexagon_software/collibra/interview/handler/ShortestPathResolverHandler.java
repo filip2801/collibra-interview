@@ -1,35 +1,32 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hexagon_software.collibra.interview.graph.algorithm.DijkstrasAlgorithm;
-import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand;
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound;
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository;
 import com.hexagon_software.collibra.interview.graph.model.NodeName;
 import lombok.AllArgsConstructor;
-import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class ShortestPathHandler extends MatchedByPatternHandler {
+public class ShortestPathResolverHandler extends MatchedByPatternHandler {
 
     private static final Pattern PATTERN = Pattern.compile("^SHORTEST PATH ((\\w|-)+) ((\\w|-)+)$");
 
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
+    protected Response handleMessage(String message) {
         ShortestPathCommand command = createCommand(message);
 
         try {
-            int weight = graphRepository.shortestPath(command);
-            session.write(weight);
+            Integer weight = graphRepository.shortestPath(command);
+            return response(weight.toString());
         } catch (NodeNotFound e) {
-            session.write("ERROR: NODE NOT FOUND");
+            return response("ERROR: NODE NOT FOUND");
         }
     }
 

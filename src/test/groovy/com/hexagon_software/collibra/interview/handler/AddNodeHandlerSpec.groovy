@@ -1,18 +1,15 @@
-package com.hexagon_software.collibra.interview.socket.handler
+package com.hexagon_software.collibra.interview.handler
 
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
-import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class AddNodeHandlerSpec extends Specification {
 
     def handler
-    def session
     def graphRepository
 
     def setup() {
-        session = Mock(IoSession)
         graphRepository = Mock(GraphRepository)
         handler = new AddNodeHandler(graphRepository)
     }
@@ -20,7 +17,7 @@ class AddNodeHandlerSpec extends Specification {
     @Unroll
     def "should #supportOrNot message #message"() {
         expect:
-        handler.isSupported(session, message) == supported
+        handler.isSupported(message) == supported
 
         where:
         message           || supported
@@ -38,11 +35,8 @@ class AddNodeHandlerSpec extends Specification {
         given:
         graphRepository.addNode(_) >> wasAdded
 
-        when:
-        handler.handleMessage(session, 'ADD NODE 1')
-
-        then:
-        1 * session.write(message)
+        expect:
+        handler.handle('ADD NODE 1') == new Response(message)
 
         where:
         wasAdded || message

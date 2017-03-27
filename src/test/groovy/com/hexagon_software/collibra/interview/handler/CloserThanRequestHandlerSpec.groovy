@@ -1,22 +1,18 @@
-package com.hexagon_software.collibra.interview.socket.handler
+package com.hexagon_software.collibra.interview.handler
 
 import com.hexagon_software.collibra.interview.graph.command.CloserThanCommand
-import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository
 import com.hexagon_software.collibra.interview.graph.model.NodeName
-import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class CloserThanRequestHandlerSpec extends Specification {
 
     def handler
-    def session
     def graphRepository
 
     def setup() {
-        session = Mock(IoSession)
         graphRepository = Mock(GraphRepository)
         handler = new CloserThanRequestHandler(graphRepository)
     }
@@ -24,7 +20,7 @@ class CloserThanRequestHandlerSpec extends Specification {
     @Unroll
     def "should #supportOrNot message #message"() {
         expect:
-        handler.isSupported(session, message) == supported
+        handler.isSupported(message) == supported
 
         where:
         message                 || supported
@@ -44,11 +40,8 @@ class CloserThanRequestHandlerSpec extends Specification {
         def command = new CloserThanCommand(new NodeName('node-1'), 10)
         graphRepository.closerThan(command) >> [node('a'), node('c'), node('d'), node('b')]
 
-        when:
-        handler.handleMessage(session, 'CLOSER THAN 10 node-1')
-
-        then:
-        1 * session.write('a,b,c,d')
+        expect:
+        handler.handle('CLOSER THAN 10 node-1') == new Response('a,b,c,d')
     }
 
     @Unroll
@@ -57,11 +50,8 @@ class CloserThanRequestHandlerSpec extends Specification {
         def command = new CloserThanCommand(new NodeName('node-1'), 10)
         graphRepository.closerThan(command) >> { throw new NodeNotFound() }
 
-        when:
-        handler.handleMessage(session, 'CLOSER THAN 10 node-1')
-
-        then:
-        1 * session.write('ERROR: NODE NOT FOUND')
+        expect:
+        handler.handle('CLOSER THAN 10 node-1') == new Response('ERROR: NODE NOT FOUND')
     }
 
     NodeName node(String name) {

@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,7 +7,6 @@ import com.hexagon_software.collibra.interview.graph.command.AddEdgeCommand;
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository;
 import com.hexagon_software.collibra.interview.graph.model.NodeName;
 import lombok.AllArgsConstructor;
-import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
@@ -19,14 +18,14 @@ public class AddEdgeHandler extends MatchedByPatternHandler {
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
+    protected Response handleMessage(String message) {
         AddEdgeCommand command = createCommand(message);
         boolean added = graphRepository.addEdge(command);
 
         if (added) {
-            session.write("EDGE ADDED");
+            return response("EDGE ADDED");
         } else {
-            session.write("ERROR: NODE NOT FOUND");
+            return response("ERROR: NODE NOT FOUND");
         }
     }
 

@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler
+package com.hexagon_software.collibra.interview.handler
 
 import com.hexagon_software.collibra.interview.graph.command.ShortestPathCommand
 import com.hexagon_software.collibra.interview.graph.exception.NodeNotFound
@@ -11,19 +11,17 @@ import spock.lang.Unroll
 class ShortestPathHandlerSpec extends Specification {
 
     def handler
-    def session
     def graphRepository
 
     def setup() {
-        session = Mock(IoSession)
         graphRepository = Mock(GraphRepository)
-        handler = new ShortestPathHandler(graphRepository)
+        handler = new ShortestPathResolverHandler(graphRepository)
     }
 
     @Unroll
     def "should #supportOrNot message #message"() {
         expect:
-        handler.isSupported(session, message) == supported
+        handler.isSupported(message) == supported
 
         where:
         message                       || supported
@@ -41,14 +39,10 @@ class ShortestPathHandlerSpec extends Specification {
     def "should write message with calculated shortest path"() {
         given:
         def command = new ShortestPathCommand(new NodeName('node-1'), new NodeName('node-2'))
-        int weight = 10
-        graphRepository.shortestPath(command) >> weight
+        graphRepository.shortestPath(command) >> 10
 
-        when:
-        handler.handleMessage(session, 'SHORTEST PATH node-1 node-2')
-
-        then:
-        1 * session.write(weight)
+        expect:
+        handler.handle('SHORTEST PATH node-1 node-2') == new Response('10')
     }
 
     @Unroll
@@ -57,11 +51,8 @@ class ShortestPathHandlerSpec extends Specification {
         def command = new ShortestPathCommand(new NodeName('node-1'), new NodeName('node-2'))
         graphRepository.shortestPath(command) >> { throw new NodeNotFound() }
 
-        when:
-        handler.handleMessage(session, 'SHORTEST PATH node-1 node-2')
-
-        then:
-        1 * session.write('ERROR: NODE NOT FOUND')
+        expect:
+        handler.handle('SHORTEST PATH node-1 node-2') == new Response('ERROR: NODE NOT FOUND')
     }
 
 }

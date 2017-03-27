@@ -1,15 +1,15 @@
 package com.hexagon_software.collibra.interview.socket.handler
 
-import org.apache.mina.core.session.DummySession
+import com.hexagon_software.collibra.interview.handler.exception.MessageHandlingNotSupported
 import org.apache.mina.core.session.IoSession
 import spock.lang.Specification
 
 import java.util.regex.Pattern
 
-class MatchedByPatternHandlerSpec extends Specification {
+class MatchedByPatternSessionAwareHandlerSpec extends Specification {
 
     def handler = new SimpleHandler()
-    def session = new DummySession()
+    def session = Mock(IoSession)
 
     def "should handle message"() {
         given:
@@ -19,7 +19,7 @@ class MatchedByPatternHandlerSpec extends Specification {
         handler.handle(session, message)
 
         then:
-        session.getAttribute("passed")
+        1 * session.write('passed')
     }
 
     def "should throw exception when message cannot be handled"() {
@@ -33,11 +33,11 @@ class MatchedByPatternHandlerSpec extends Specification {
         thrown MessageHandlingNotSupported
     }
 
-    class SimpleHandler extends MatchedByPatternHandler {
+    class SimpleHandler extends MatchedByPatternSessionAwareHandler {
 
         @Override
         protected void handleMessage(IoSession session, String message) {
-            session.setAttribute("passed", true)
+            session.write('passed')
         }
 
         @Override

@@ -1,4 +1,4 @@
-package com.hexagon_software.collibra.interview.socket.handler;
+package com.hexagon_software.collibra.interview.handler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import com.hexagon_software.collibra.interview.graph.model.GraphRepository;
 import com.hexagon_software.collibra.interview.graph.model.NodeName;
 import lombok.AllArgsConstructor;
-import org.apache.mina.core.session.IoSession;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
@@ -18,14 +17,14 @@ public class AddNodeHandler extends MatchedByPatternHandler {
     private final GraphRepository graphRepository;
 
     @Override
-    protected void handleMessage(IoSession session, String message) {
+    protected Response handleMessage(String message) {
         NodeName nodeName = getNodeName(message);
         boolean added = graphRepository.addNode(nodeName);
 
         if (added) {
-            session.write("NODE ADDED");
+            return response("NODE ADDED");
         } else {
-            session.write("ERROR: NODE ALREADY EXISTS");
+            return response("ERROR: NODE ALREADY EXISTS");
         }
     }
 
