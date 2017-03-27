@@ -14,7 +14,7 @@ import com.hexagon_software.collibra.interview.graph.resolver.ShortestPathResolv
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GraphLockingRepository implements GraphRepository {
+class GraphLockingRepository implements GraphRepository {
 
     private final ShortestPathResolver shortestPathResolver;
     private final CloserThanResolver closerThanResolver;
